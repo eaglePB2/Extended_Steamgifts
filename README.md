@@ -1,15 +1,11 @@
-<a target="_blank" href="https://steamcommunity.com/tradeoffer/new/?partner=95793561&amp;token=HxnczDWg"><img src="https://raw.githubusercontent.com/nandee95/Extended_Steamgifts/master/img/steam_donate.png"></a>
+Original Authors:
+* Nandee ( Programmer )
+* Pele ( Tester )
 
-Pull requests only for bugs. Please do not create pull requests for new features.<br>
-The script isn't under active development anymore. However i'm trying to keep it working and up to date. 
-
-<b>Description:</b>
-This is an userscript for steamgifts.com It helps you to use this website faster and makes the browsing more confortable. It has a lot of cool features. Check out the screenshots!!
-
-<a href="http://steamcommunity.com/groups/extendedsg">Steam Group</a>
+This is a forked project to make my own modifications of changes, due to 2026 SteamGifts UI updates.
+This removes majority of duplicated features, outdated info, while keeping the remaining core features that everyone needs.
 
 <b>Features:</b>
-* Add Enter button every active giveaways (list, real-time update)
 * Display chances for every giveaway (list, also on entered ga page)
 * Endless scrolling (with a lot of additional features)
 * Fixed header
@@ -20,6 +16,3 @@ This is an userscript for steamgifts.com It helps you to use this website faster
 * Automatically display images
 * SGv2 Dark Theme support
 
-<b>Authors:</b>
-* Nandee ( Programmer )
-* Pele ( Tester )
