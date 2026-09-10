@@ -1,10 +1,10 @@
 // ==UserScript==
 // @name		Extended Steamgifts
 // @description	New features for Steamgifts.com
-// @author		Nandee
+// @author		Nandee, Modified by EaglePB2
 // @namespace	esg
 // @include	    *steamgifts.com*
-// @version		2.4.6
+// @version		3.0.0
 // @downloadURL	https://github.com/nandee95/Extended_Steamgifts/raw/master/Extended_Steamgifts.user.js
 // @updateURL	https://github.com/nandee95/Extended_Steamgifts/raw/master/Extended_Steamgifts.user.js
 // @supportURL  http://steamcommunity.com/groups/extendedsg/discussions/0/
@@ -49,7 +49,7 @@ Changelog:
 - Giveaway filter
 - Optimized code(removed unneded parts)
 - Community Voted sidebar
-- Rewrited Infinite scrolling 
+- Rewrited Infinite scrolling
 - Added infinite scrolling everywhere
 - Added [NEW] giveaway mark
 - Removed Giveaway Highlighting feature(becouse of bad performance & new filter feature)
@@ -225,6 +225,14 @@ Changelog:
 - Fixed some code errors
 2.4.6 (2022. 12. 26)
 - Fixed sidebar
+3.0.0 (2026. 09. 10.)
+- Removed most of the features which is already exist in newest cg update in steamgifts, that includes:
+  - quick join
+  - quick description
+- Only keep the core features - sliders, inf scroll, chances, better text editor
+- Decreased the 100p sliders to 50p, as this is the maximum p we can get
+- Removed outdated itstoohard.quiz tabs.
+- Removed auto join feature to avoid gettig banned.
  */
 
 /* jshint multistr: true */
@@ -420,11 +428,6 @@ function getUrlParameter(sParam) {
 	}
 }
 
-//Custom menu elements
-$(".nav__button:contains('Giveaways')").closest(".nav__button-container").find(".nav__absolute-dropdown").append('	\
-<a class="nav__row" href="http://www.itstoohard.com/create" target="_blank"><i class="icon-green fa fa-fw fa-question"></i>	\
-<div class="nav__row__summary"><p class="nav__row__summary__name">Create quiz</p><p class="nav__row__summary__description">It\'s too hard</p></div></a>	\
-');
 $(".nav__button:contains('Help')").closest(".nav__button-container").find(".nav__absolute-dropdown").append('	\
 <a class="nav__row" href="/bundle-games"><i class="icon-red fa fa-fw fa-delicious"></i>	\
 <div class="nav__row__summary"><p class="nav__row__summary__name">Bundle games</p><p class="nav__row__summary__description">Full list of bundle games.</p></div></a>	\
@@ -507,7 +510,6 @@ function display_options() {
 		</div>	\
 		";
 	}
-	addToOptions("Enter/Remove button", "esg_enterremove", 1);
 	addToOptions("Endless scrolling", "esg_autoscroll", 1);
 	addToOptions("Display chances", "esg_chances", 1);
 	addToOptions("Fixed header", "esg_fixedheader", 1);
@@ -610,7 +612,7 @@ if($(".block_header_text:contains('Discussions')").length>0 && Number(GM_getValu
 			  var owner = $(this).find(".table__column__secondary-link").eq(1).text();
 				var elapsed = $(this).find(".table__column__secondary-link").eq(0).closest("p").find("span").text();
 				var title = otitle;
-			  
+
 
 				c1 += '<li class="sidebar__navigation__itemz">	\
 			<a class="sidebar__navigation__item__link" href="' + url + '" title="' + otitle.replace(/\"/g,"'") + '" >	\
@@ -789,7 +791,7 @@ if(Number(GM_getValue("esg_commenteditor",1)))
 <div class="comment__submit-button" title="Controller" type="insert" value="🎮">🎮</div>	\
 <div class="comment__submit-button" title="Santa" type="insert" value="🎅">🎅</div>	\
 </div>');
-    
+
     $(".emoticons").find(".comment__submit-button").each(function () { $(this).css("display","inline-block").css("width","32px").css("height","32px").css("padding","0") } );
 
     $(document).on('click', '.comment__tools .comment__submit-button', function() {
@@ -864,55 +866,6 @@ if(Number(GM_getValue("esg_commenteditor",1)))
     });
 }
 
-//Advanced Search - Coming soon
-/*
-if (path.match('^/giveaways/')|| path == '/')
-{
-    $(".sidebar__search-container").css("margin-bottom","2px");
-	$(".sidebar__search-container").before('<h3 class="sidebar__heading">Advanced Search</h3>');
-	var s_lv_min=getUrlParameter("level_min")?Math.max(Math.min(getUrlParameter("level_min"),10),0):0;
-	var s_lv_max=getUrlParameter("level_max")?Math.max(Math.min(getUrlParameter("level_max"),10),0):10;
-	var s_e_min=getUrlParameter("entry_min")?Math.max(Math.min(getUrlParameter("entry_min"),5000),0):0;
-	var s_e_max=getUrlParameter("entry_max")?Math.max(Math.min(getUrlParameter("entry_max"),5000),0):5000;
-	$(".sidebar__search-container").after('<div class="advanced_search"><form method="GET">	\
-		Level <span class="s_lv">' + (s_lv_min == s_lv_max ? s_lv_min : s_lv_min + " - " + s_lv_max) + '</span>			\
-		<div class="search__slider form__slider_search--level ui-slider ui-slider-horizontal ui-widget ui-widget-content ui-corner-all">	\
-		<div style="width: 0%;" class="ui-slider-range ui-widget-header ui-corner-all ui-slider-range-min"></div>	\
-		<span style="left: 0%;" class="ui-slider-handle ui-state-default ui-corner-all" tabindex="1" width="100%">	\
-		</span></div>	\
-		Entry <span class="s_entries">' + (s_e_min == s_e_max ? (s_e_max==5000?"&infin;":s_e_max) : s_e_min + " - " + (s_e_max==5000?"&infin;":s_e_max)) + '</span>			\
-		<div class="search__slider form__slider_search--entry ui-slider ui-slider-horizontal ui-widget ui-widget-content ui-corner-all">	\
-		<div style="width: 0%;" class="ui-slider-range ui-widget-header ui-corner-all ui-slider-range-min"></div>	\
-		<span style="left: 0%;" class="ui-slider-handle ui-state-default ui-corner-all" tabindex="1" width="100%">	\
-		</span></div>	\
-');
-	$('.form__slider_search--level').slider({
-		range: true,
-		values: [s_lv_min, s_lv_max],
-		min: 0,
-		max: 10,
-		slide: function(event, ui) {
-			$(".s_lv").text(ui.values[0] == ui.values[1] ? ui.values[0] : ui.values[0] + " - " + ui.values[1]);
-		}
-	});
-	
-	 $('.form__slider_search--entry').slider({
-		range: true,
-		values: [s_e_min, s_e_max],
-		min: 0,
-		max: 5000,
-		slide: function(event, ui) {
-			var min=ui.values[0];
-			var max=ui.values[1];
-			if(max==5000) max="&infin;";
-			if(min==5000) min="&infin;";
-			$(".s_entries").html(min == max ? max : min + " - " + max);
-		}
-	});
-
-}
-*/
-
 //Remove the paddings if adblock enabled
 if($(".sidebar__mpu").height()<10)
 	$(".sidebar__mpu").hide();
@@ -933,7 +886,7 @@ if ($(".pagination").length > 0 && Number(GM_getValue("esg_autoscroll", 1))) {
 	if ($('.comment--submit').length > 0) {
 		$('.comment--submit').insertAfter(".page__heading:contains('Comment')");
 	}
-	
+
 	$(document).on("click",".js__comment-reply-cancel",function () {
 		$('.comment--submit').insertAfter(".page__heading:contains('Comment')");
 	});
@@ -998,7 +951,7 @@ if ($(".pagination").length > 0 && Number(GM_getValue("esg_autoscroll", 1))) {
 	});
 }
 
-$(document).on("click",".jump_to_comment",function () { 
+$(document).on("click",".jump_to_comment",function () {
     setTimeout(function() {
     $('html, body').animate({
 			scrollTop: $(".comment--submit").offset().top-100
@@ -1125,7 +1078,7 @@ $.fn.filter_ga = function() {
 			$(ga).hide();
 		else if (!(GM_getValue("esg_f_min_chance", 0) <= chance && chance <= GM_getValue("esg_f_max_chance", 100)))
 			$(ga).hide();
-		else if (!(GM_getValue("esg_f_min_points", 0) <= req && req <= GM_getValue("esg_f_max_points", 100)))
+		else if (!(GM_getValue("esg_f_min_points", 0) <= req && req <= GM_getValue("esg_f_max_points", 50)))
 			$(ga).hide();
 		else if(!(GM_getValue("esg_f_min_copies", 1) <= copies && (copies <= GM_getValue("esg_f_max_copies", 100000)|| GM_getValue("esg_f_max_copies", 100000)==100000)))
 			$(ga).hide();
@@ -1189,34 +1142,15 @@ $.fn.format_ga = function() {
 		var has = Number($(".nav__points").text());
 		var enough = req <= has ? true : false;
 		var user = $(ga).find(".giveaway__username").text();
-		
+
 		var title=$(ga).find(".giveaway__heading__name").text();
-		
+
 		var pinned=$(ga).closest(".pinned-giveaways__outer-wrap").length!==0?1:0;
-		
+
 		//Display chances
 		if (Number(GM_getValue("esg_chances", 1)) && loggedin) {
 			$(ga).find('.giveaway__columns').find("div:first").after('<div><i class="fa fa-fw fa-area-chart"></i> <span title="Odds: '+(entries/copies).toFixed(0)+':1"'+(chance>=5?" style='font-weight:bold'":"")+'>' + chance.toFixed(2) + '% chance</span></div>');
 		}
-
-		//Enter/Remove button
-		if (Number(GM_getValue("esg_enterremove", 1)) && loggedin && active && user != username && title!="Invite Only" && $(ga).find('.giveaway__column--contributor-level--negative').length === 0) {
-			$(ga).find('.giveaway__row-inner-wrap').removeClass('is-faded');
-			$(ga).find(".giveaway__columns").append("<div><form>	\
-				<input type=\"hidden\" name=\"xsrf_token\" value=\"" + xsrf + "\" />	\
-				<input type=\"hidden\" name=\"do\" value=\"\" />	\
-				<input type=\"hidden\" name=\"code\" value=\"" + code + "\" />	\
-				<div data-do=\"entry_insert\" class=\"sidebar__entry-custom sidebar__entry-insert" + (!entered && enough ? "" : " is-hidden") + "\"><i class=\"fa fa-plus-circle\"></i> Enter</div>	\
-				<div data-do=\"entry_delete\" class=\"sidebar__entry-custom sidebar__entry-delete" + (entered ? "" : " is-hidden") + "\"><i class=\"fa fa-minus-circle\"></i> Remove</div>	\
-				<div class=\"sidebar__entry-custom sidebar__entry-loading is-hidden\"><i class=\"fa fa-refresh fa-spin\"></i> Wait</div>	\
-				<div class=\"sidebar__entry-custom sidebar__error " + (!enough && !entered ? "" : " is-hidden") + "\">" + (!enough && !entered ? "<i class=\"fa fa-exclamation-circle\"></i> Not enough points" : "") + "</div>	\
-				</form></div>");
-		}
-
-		//Description
-		$(ga).find(".giveaway__hide").after("<i class=\"giveaway__icon fa fa-file-text-o open--desc\"></i>");
-		//Search
-		//$(ga).find(".giveaway__hide").after("<a href=\"/giveaways/search?q="+encodeURIComponent(title.replace('...', ''))+"\" target=\"_blank\"><i class=\"giveaway__icon fa fa-search\"></i></a>");
 
 		//Marks
 		if (Number(GM_getValue("esg_gamark", 1))) {
@@ -1245,86 +1179,6 @@ setTimeout(function () {  $(window).trigger('scroll'); },200);
 //Format giveaways (on load)
 $('.giveaway__row-outer-wrap').format_ga();
 
-//Enter/Remove Button click
-setTimeout(function() {
-	if (path.match('^/giveaway/')) return;
-	$(".sidebar__entry-insert, .sidebar__entry-delete").unbind("click");
-	$(document).on('click', '.sidebar__entry-insert:not(.enterall), .sidebar__entry-delete', function() {
-		var t = $(this);
-        /*
-        if(t.hasClass("sidebar__entry-delete"))
-        {
-            var ga=$(t).closest(".giveaway__row-outer-wrap");
-            var points = Number($(ga).find(".giveaway__heading__thin:last").text().replace("(", "").replace(")", "").replace("P", ""));
-            var has = Number($(".nav__points").text());
-            if(has+points>400)
-            {
-                var diff=points+has-400;
-                if(!confirm("Are you sure?\nYou will lose "+diff+" point"+(diff>1?"s":"")+" by doing this!")) return;
-            }
-        }*/
-        t.addClass("is-hidden");
-		t.closest("form").find(".sidebar__entry-loading").removeClass("is-hidden");
-		t.closest("form").find("input[name=do]").val(t.attr("data-do"));
-		$.ajax({
-			url: "/ajax.php",
-			type: "POST",
-			dataType: "json",
-			data: t.closest("form").serialize(),
-            timeout: 5000,
-			success: function(e) {
-				t.closest("form").find(".sidebar__entry-loading").addClass("is-hidden");
-				if("success" === e.type)
-				{
-					if(t.hasClass("sidebar__entry-insert"))t.closest("form").find(".sidebar__entry-delete").removeClass("is-hidden");
-					else if(t.hasClass("sidebar__entry-delete")) t.closest("form").find(".sidebar__entry-insert").removeClass("is-hidden");
-				} else if("error" === e.type) t.closest("form").find(".sidebar__error").removeClass("is-hidden").html("undefined" != typeof e.link && e.link !== 0 ? '<a href="' + e.link + '"><i class="fa fa-exclamation-circle"></i> ' + e.msg + "</a>" : '<i class="fa fa-exclamation-circle"></i> ' + e.msg);
-				$(".live__entry-count").text(e.entry_count);
-				$(".nav__points").text(e.points);
-                var pinned=$(t).closest(".pinned-giveaways__outer-wrap").length!==0?1:0;
-				if (Number(GM_getValue("esg_hideentered", 0)) && "success" === e.type &&!pinned) {
-					$(t).closest(".giveaway__row-outer-wrap").slideToggle(500);
-				}
-				update_gas(e.points);
-			},
-            error: function(e)
-            {
-				t.closest("form").find(".sidebar__entry-loading").addClass("is-hidden");
-                t.closest("form").find(".sidebar__error").removeClass("is-hidden").html("undefined" != typeof e.link && e.link !== 0 ? '<a href="' + e.link + '"><i class="fa fa-exclamation-circle"></i> Timeout</a>' : '<i class="fa fa-exclamation-circle"></i> Timeout');
-            }
-		});
-	});
-	$(document).on('click', '.sidebar__error', function() {
-		$(this).addClass("is-hidden").parent().find(".sidebar__entry-insert").removeClass("is-hidden");
-	});
-}, 10);
-
-function update_gas(p) {
-	if (p == -1)
-		p = Number($(".nav__points").text());
-	$('.giveaway__row-outer-wrap').each(function() {
-		if(!$(this).find(".sidebar__error").hasClass("is-hidden")&&$(this).find(".sidebar__error").text()!=" Not enough points") return;
-		var req = Number($(this).find(".giveaway__heading__thin:last").text().replace("(", "").replace(")", "").replace("P", ""));
-		var entered = !$(this).find(".sidebar__entry-delete").hasClass('is-hidden');
-		if (req > p && !entered) {
-			$(this).find(".sidebar__entry-delete").addClass("is-hidden");
-			$(this).find(".sidebar__entry-insert").addClass("is-hidden");
-			$(this).find(".sidebar__entry-loading").addClass("is-hidden");
-			$(this).find(".sidebar__error").removeClass("is-hidden").html('<i class="fa fa-exclamation-circle"></i> Not enough points');
-		} else if (entered) {
-			$(this).find(".sidebar__entry-delete").removeClass("is-hidden");
-			$(this).find(".sidebar__entry-insert").addClass("is-hidden");
-			$(this).find(".sidebar__entry-loading").addClass("is-hidden");
-			$(this).find(".sidebar__error").addClass("is-hidden");
-		} else {
-			$(this).find(".sidebar__entry-delete").addClass("is-hidden");
-			$(this).find(".sidebar__entry-insert").removeClass("is-hidden");
-			$(this).find(".sidebar__entry-loading").addClass("is-hidden");
-			$(this).find(".sidebar__error").addClass("is-hidden");
-		}
-	});
-}
-
 //Refresh points every min
 if (Number(GM_getValue("esg_refresh", 0))) {
 	setInterval(function() {
@@ -1336,7 +1190,6 @@ if (Number(GM_getValue("esg_refresh", 0))) {
 			success: function(e) {
 				if ($(".nav__points").text() != e.points) {
 					$(".nav__points").text(e.points);
-					update_gas(e.points);
 				}
 			}
 		});
@@ -1369,25 +1222,25 @@ check_entered_chances();
 //Comment formatting
 $.fn.format_comment = function() {
     if(!Number(GM_getValue("esg_comment",1))) return $(this);
-    
+
 	return $(this).each(function() {
 			$(this).find(".comment__toggle-attached").remove();
 			$(this).find("img").removeClass("is-hidden");
 			$(this).find("a").each(function () {
-                
+
                 if($(this).closest("table").length != 0 ) return
                 var res = $(this).attr("href").match(/^(?:https?:\/\/(?:www.)?)(?:youtube.com\/watch\?v=|youtu.be\/)([a-zA-Z0-9\_\-]+).*?$/);
                 if(res)
                 {
                     $(this).after('<iframe class="global__image-outer-wrap" src="https://www.youtube.com/embed/'+res[1]+'" width="420" height="315"  frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>');
                 }
-                
+
                 res = $(this).attr("href").match(/^(?:https?:\/\/(?:www.)?)vimeo.com\/([0-9]{5,12})\/?.+?$/);
                 if(res)
                 {
                     $(this).after('<iframe src="https://player.vimeo.com/video/'+res[1]+'" class="global__image-outer-wrap" width="420" height="315" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>');
                 }
-                
+
                  res = $(this).attr("href").match(/^(?:https?:\/\/)store.steampowered.com\/app\/(\d+)\/.*?$/);
                 if(res)
                 {
@@ -1475,7 +1328,7 @@ $("header .nav__left-container").append("	\
 	</div>");
 
 //Click event fix (part of original js)
-$(document).on('click',".table__remove-default",function() { 
+$(document).on('click',".table__remove-default",function() {
 	var e=$(this);
 	e.addClass("is-hidden");
 	e.siblings(".table__remove-loading").removeClass("is-hidden");
@@ -1558,92 +1411,6 @@ $(document).on('click', '.poll__vote-button-sidebar', function() {
 	}
 });
 
-
-//View description button
-var dsc_created = false;
-$(".footer__outer-wrap").prepend('		\
-	<div style="z-index: 9999" class="popup__desc-loading popup">		\
-	<i class="popup__icon fa fa-spinner fa-spin"></i>		\
-	<p class="popup__heading"><span class="popup__heading__bold">Loading ...</span></p>		\
-	<p class="popup__actions">		\
-	<span class="b-close">Close</span>		\
-	</p>		\
-	</div>		\
-	<div style="z-index: 9999; max-width:1000px" class="popup__desc-display popup">		\
-	<i class="popup__icon fa fa-file-text-o"></i>		\
-	<p class="popup__heading"></p>		\
-	<p class="popup__actions">		\
-	<span class="b-close">Close</span>		\
-	</p>		\
-	</div>			\
-	<div style="z-index: 9999; " class="popup__desc-error popup">		\
-	<i class="popup__icon fa fa-exclamation-circle"></i>		\
-	<p class="popup__heading"><span class="popup__heading__bold">No description found!</span></p>		\
-	<p class="popup__actions">		\
-	<span class="b-close">Close</span>		\
-	</p>		\
-	</div>');
-
-//Giveaway description
-$(document).on('click', '.open--desc', function() {
-	var t = $(this);
-	var link = $(t).closest(".giveaway__row-outer-wrap").find(".giveaway__heading__name").attr("href");
-	$(".popup__desc-loading").bPopup({
-		opacity: 0.85,
-		fadeSpeed: 200,
-		followSpeed: 500,
-		modalColor: "#3c424d",
-		onClose: function() {
-			req.abort();
-		}
-	});
-	var req = $.ajax({
-		url: link,
-		success: function(source) {
-			$(".popup__desc-loading").hide();
-			var desc = $(source).find(".page__description").html();
-			if (desc) {
-				$(".popup__desc-display").find(".popup__heading").html('<span class="popup__heading__bold">Description:</span><br><div class=\"popup--content page__description\" style=\"word-break: break-all;text-align:left;\">' + desc + "</div>");
-				$(".popup__desc-loading").find(".b-close").trigger("click");
-				$(".popup__desc-display").bPopup({
-					opacity: 0.85,
-					fadeSpeed: 200,
-					followSpeed: 500,
-					modalColor: "#3c424d",
-					onClose: function() {
-						req.abort();
-					}
-				});
-			} else {
-				$(".popup__desc-loading").find(".b-close").trigger("click");
-				$(".popup__desc-error").find(".popup__heading__bold").text("No description found!");
-				$(".popup__desc-error").bPopup({
-					opacity: 0.85,
-					fadeSpeed: 200,
-					followSpeed: 500,
-					modalColor: "#3c424d",
-					onClose: function() {
-						req.abort();
-					}
-				});
-			}
-		},
-		error: function() {
-			$(".popup__desc-loading").find(".b-close").trigger("click");
-			$(".popup__desc-error").find(".popup__heading__bold").text("Connection failed!");
-			$(".popup__desc-error").bPopup({
-				opacity: 0.85,
-				fadeSpeed: 200,
-				followSpeed: 500,
-				modalColor: "#3c424d",
-				onClose: function() {
-					req.abort();
-				}
-			});
-		}
-	});
-});
-
 //Giveaway filtering
 $('.giveaway__row-outer-wrap').filter_ga();
 if (path == '/') {
@@ -1653,7 +1420,7 @@ if (path == '/') {
 	var f_ch_min = GM_getValue("esg_f_min_chance", 0);
 	var f_ch_max = GM_getValue("esg_f_max_chance", 100);
 	var f_p_min = GM_getValue("esg_f_min_points", 0);
-	var f_p_max = GM_getValue("esg_f_max_points", 100);
+	var f_p_max = GM_getValue("esg_f_max_points", 50);
 	var f_group = GM_getValue("esg_f_group", 1);
 	var f_white = GM_getValue("esg_f_whitelist", 1);
 	var f_region = GM_getValue("esg_f_regionrestricted", 1);
@@ -1750,18 +1517,18 @@ if (path == '/') {
          alert("The minimum value can't be higher than the maximum value.")
          return
         }
-        
+
         GM_setValue("esg_f_min_copies", int);
         var min = int;
-              
-        
+
+
         $(".f_copies").html("<span class=\"f_min_copy\">"+(min == max ? (max==1000? "&infin;":max) : min )+ "</span> - <span class=\"f_max_copy\">" + (max==1000? "&infin;":max)+"</span>");
-        
+
         $('.form__slider_filter--copies').slider('values',0,min).slider('values',1,max);
-        
+
         $('.giveaway__row-outer-wrap').filter_ga();
     });
-    
+
     $(document).on("click",".f_max_copy",function () {
         var val = prompt("Maximum copy: (1000 means infinity)");
         var int = Number(val);
@@ -1776,19 +1543,19 @@ if (path == '/') {
          alert("The maximum value can't be lower than the minimum value.")
          return
         }
-        
+
         GM_setValue("esg_f_max_copies", int);
         var max = int;
-              
-        
+
+
         $(".f_copies").html("<span class=\"f_min_copy\">"+(min == max ? (max==1000? "&infin;":max) : min )+ "</span> - <span class=\"f_max_copy\">" + (max==1000? "&infin;":max)+"</span>");
-        
+
         $('.form__slider_filter--copies').slider('values',0,min).slider('values',1,max);
-        
+
         $('.giveaway__row-outer-wrap').filter_ga();
     });
-    
-	
+
+
 	Math.easeIn = function (val, min, max, strength) {
 		val /= max;
 		return (max-1)*Math.pow(val, strength) + min;
@@ -1826,7 +1593,7 @@ if (path == '/') {
 		range: true,
 		values: [f_p_min, f_p_max],
 		min: 0,
-		max: 100,
+		max: 50,
 		slide: function(event, ui) {
 			GM_setValue("esg_f_min_points", ui.values[0]);
 			GM_setValue("esg_f_max_points", ui.values[1]);
