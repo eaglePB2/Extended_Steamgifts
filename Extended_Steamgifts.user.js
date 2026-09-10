@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Extended Steamgifts (Complete Refactored)
 // @description  Streamlined, high-performance features for Steamgifts.com
-// @author       Nandee, Modified by EaglePB2, Refactored by Linus Style Skill.md ruleset
+// @author       Nandee, Modified by EaglePB2, Refactored by Linus Style
 // @namespace    esg
 // @include      *steamgifts.com*
 // @version      3.2.0
@@ -197,6 +197,41 @@
      * 4. 導航欄擴充 (Bundle Games & ESG Tab)
      * ========================================================================= */
     function initNavigationTabs() {
+
+        // 将 Deals 按钮改造成下拉菜单（整合 IsThereAnyDeal）
+        const $dealsBtn = $("header nav a.nav__button[href='/discussions/deals']");
+        const $dealsContainer = $dealsBtn.closest(".nav__button-container");
+
+        if ($dealsContainer.length && $dealsContainer.find('.nav__relative-dropdown').length === 0) {
+            // 给主按钮增加下拉标识类名
+            $dealsBtn.addClass("nav__button--is-dropdown");
+
+            // 在主按钮前插入下拉面板，并追加下拉触发箭头
+            $dealsBtn.before(`
+                <div class="nav__relative-dropdown is-hidden">
+                    <div class="nav__absolute-dropdown">
+                        <a class="nav__row" href="/discussions/deals">
+                            <i class="icon-grey fa fa-fw fa-comments"></i>
+                            <div class="nav__row__summary">
+                                <p class="nav__row__summary__name">Deals Forum</p>
+                                <p class="nav__row__summary__description">SteamGifts deals discussions</p>
+                            </div>
+                        </a>
+                        <a class="nav__row" target="_blank" rel="noopener noreferrer" href="https://isthereanydeal.com/">
+                            <i class="icon-blue fa fa-fw fa-external-link"></i>
+                            <div class="nav__row__summary">
+                                <p class="nav__row__summary__name">IsThereAnyDeal</p>
+                                <p class="nav__row__summary__description">Check game deals & price history</p>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            `);
+
+            // 在主按钮后插入原生下拉箭头（自动继承既有的展开事件）
+            $dealsBtn.after('<div class="nav__button nav__button--is-dropdown-arrow"><i class="fa fa-angle-down"></i></div>');
+        }
+
         const $helpDropdown = $(".nav__button:contains('Help')")
             .closest(".nav__button-container")
             .find(".nav__absolute-dropdown");
@@ -237,14 +272,14 @@
                                     <p class="nav__row__summary__description">Open options</p>
                                 </div>
                             </a>
-                            <a class="nav__row" target="_blank" href="http://steamcommunity.com/groups/extendedsg/discussions/0/">
+                            <a class="nav__row" target="_blank" href="https://github.com/eaglePB2/Extended_Steamgifts/issues">
                                 <i class="icon-red fa fa-fw fa-bug"></i>
                                 <div class="nav__row__summary">
                                     <p class="nav__row__summary__name">Bug report</p>
-                                    <p class="nav__row__summary__description">Report bugs here!</p>
+                                    <p class="nav__row__summary__description">Report bugs on GitHub Issues</p>
                                 </div>
                             </a>
-                            <a class="nav__row" target="_blank" href="https://github.com/nandee95/Extended_Steamgifts">
+                            <a class="nav__row" target="_blank" href="https://github.com/eaglePB2/Extended_Steamgifts">
                                 <i class="icon-green fa fa-fw fa-github"></i>
                                 <div class="nav__row__summary">
                                     <p class="nav__row__summary__name">Source Code</p>
