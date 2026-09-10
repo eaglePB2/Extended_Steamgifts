@@ -4,6 +4,8 @@
 
 A lightweight and high-performance userscript for SteamGifts. It eliminates DOM reflow and scroll loops, providing smooth infinite scrolling, real-time win chance calculations, giveaway filtering, and an enhanced Markdown comment toolbar.
 
+[中文](./README_CN.md)
+
 ### Original Authors
 * Nandee (Programmer)
 * Pele (Tester)
