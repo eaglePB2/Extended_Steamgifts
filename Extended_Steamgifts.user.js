@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Extended Steamgifts (Complete Refactored)
 // @description  Streamlined, high-performance features for Steamgifts.com
-// @author       Nandee, Modified by EaglePB2, Refactored by Linus Style Gemini Flash v8
+// @author       Nandee, Modified by EaglePB2, Refactored by Linus Style
 // @namespace    esg
 // @include      *steamgifts.com*
 // @version      3.2.0
@@ -359,6 +359,10 @@
         $(".fa-caret-right:first").remove();
         $(".esg__about").addClass("is-selected").find(".sidebar__navigation__item__link").prepend('<i class="fa fa-caret-right"></i>');
 
+        // 替换为你的真实 GitHub 仓库地址与用户名
+        const FORK_REPO = "https://github.com/eaglePB2/Extended_Steamgifts";
+        const UPSTREAM_REPO = "https://github.com/nandee95/Extended_Steamgifts";
+
         $container.html(`
             <div class="page__heading">
                 <div class="page__heading__breadcrumbs">
@@ -369,16 +373,26 @@
             </div>
             <div class="form__rows">
                 <div class="form__row">
-                    <div class="form__heading"><div class="form__heading__number">1.</div><div class="form__heading__text">Extended Steamgifts ${SCRIPT_VER}</div></div>
+                    <div class="form__heading">
+                        <div class="form__heading__number">1.</div>
+                        <div class="form__heading__text">Extended Steamgifts ${SCRIPT_VER}</div>
+                    </div>
                     <div class="form__row__indent markdown">
-                        Author: Nandee, Refactored<br>
-                        Licensed under the <a href="https://github.com/nandee95/Extended_Steamgifts/blob/master/LICENSE.md" target="_blank">MIT license</a><br><br>
-                        GitHub: <a href="https://github.com/nandee95/Extended_Steamgifts">github.com/nandee95/Extended_Steamgifts</a>
+                        <strong>Maintained by:</strong> EaglePB2<br>
+                        <strong>Original Author:</strong> Nandee (2014-2016)<br>
+                        <strong>License:</strong> <a href="${FORK_REPO}/blob/master/LICENSE.md" target="_blank">MIT License</a><br><br>
+                        <strong>Source Code:</strong> <a href="${FORK_REPO}" target="_blank">${FORK_REPO.replace('https://', '')}</a><br>
+                        <strong>Upstream:</strong> <a href="${UPSTREAM_REPO}" target="_blank">github.com/nandee95/Extended_Steamgifts</a>
                     </div>
                 </div>
                 <div class="form__row">
-                    <div class="form__heading"><div class="form__heading__number">2.</div><div class="form__heading__text">Status</div></div>
-                    <div class="form__row__indent">Cleaned architecture, decoupled DOM parsing, zero scroll loops.</div>
+                    <div class="form__heading">
+                        <div class="form__heading__number">2.</div>
+                        <div class="form__heading__text">Project Status</div>
+                    </div>
+                    <div class="form__row__indent">
+                        Maintained fork. Decoupled DOM parsing architecture, eliminated scroll death loops, and restored modern site compatibility.
+                    </div>
                 </div>
             </div>
         `);
