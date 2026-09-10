@@ -16,3 +16,10 @@ This removes majority of duplicated features, outdated info, while keeping the r
 * Automatically display images
 * SGv2 Dark Theme support
 
+<b>Screenshots:</b>
+![](./screenshots/Screenshot_1.png)
+![](./screenshots/Screenshot_2.png)
+![](./screenshots/Screenshot_3.png)
+![](./screenshots/Screenshot_4.png)
+![](./screenshots/Screenshot_5.png)
+![](./screenshots/Screenshot_6.png)
