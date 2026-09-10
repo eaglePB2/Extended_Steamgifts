@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Extended Steamgifts (Complete Refactored)
 // @description  Streamlined, high-performance features for Steamgifts.com
-// @author       Nandee, Modified by EaglePB2, Refactored by Linus Style
+// @author       Nandee, Modified by EaglePB2, Refactored by Linus Style Skill.md ruleset
 // @namespace    esg
 // @include      *steamgifts.com*
 // @version      3.2.0
