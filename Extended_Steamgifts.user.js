@@ -36,7 +36,6 @@
         { key: 'esg_fixedheader', label: 'Fixed header', def: 1 },
         { key: 'esg_refresh', label: 'Refresh points (60sec)', def: 0 },
         { key: 'esg_scrolltop', label: 'Scroll to top button', def: 1 },
-        { key: 'esg_hideentered', label: 'Hide entered giveaways', def: 0 },
         { key: 'esg_discussions', label: 'Active discussions in sidebar', def: 1 },
         { key: 'esg_gsg', label: 'Giveaway Signature Generator', def: 1 },
         { key: 'esg_gamark', label: 'Giveaway marks ([NEW], [FREE])', def: 1 },
@@ -185,11 +184,6 @@
             if (data.cost === 0 && heading.text().trim() !== 'Invite Only') {
                 heading.prepend('<font color="#00BFBF" class="ga-mark">[FREE]</font> ');
             }
-        }
-
-        // 依據設定隱藏已參加抽獎
-        if (Storage.getNumber("esg_hideentered", 0) && data.entered && !data.isPinned && !PATH.includes('/won') && !PATH.startsWith('/user')) {
-            $el.addClass("is-hidden");
         }
     }
 
