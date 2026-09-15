@@ -856,6 +856,29 @@
                             $newRows.each(function () {
                                 const $el = $(this);
                                 decorateGiveaway($el);
+
+                                // Re-bind native SteamGifts hide & popup handlers for dynamically injected rows
+    $el.find('.giveaway__hide').on('click', function () {
+        const gameId = $(this).attr('data-game-id');
+        const gameName = $(this).closest('.giveaway__heading, h2').find('.giveaway__heading__name').text();
+        const $popup = $('.popup--hide-games');
+
+        $popup.find('input[name="game_id"]').val(gameId);
+        $popup.find('.popup__heading__bold').text(gameName);
+    });
+
+    $el.find('.trigger-popup').on('click', function () {
+        const popupClass = $(this).attr('data-popup');
+        if (popupClass && typeof $.fn.bPopup === 'function') {
+            $('.' + popupClass).bPopup({
+                opacity: 0.85,
+                fadeSpeed: 200,
+                followSpeed: 500,
+                modalColor: '#3c424d'
+            });
+        }
+    });
+
                                 $container.append($el);
                             });
                             applyFilters();
