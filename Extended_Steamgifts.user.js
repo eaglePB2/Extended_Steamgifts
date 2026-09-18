@@ -823,7 +823,7 @@
         let currentPage = Number($('.pagination__navigation .is-selected').attr('data-page-number')) || 1;
 
         const baseUrl = window.location.href;
-        const $loader = $('<img src="https://raw.githubusercontent.com/nandee95/Extended_Steamgifts/master/img/loading.gif" class="page-loading">');
+        const $loader =$('<img src="https://raw.githubusercontent.com/nandee95/Extended_Steamgifts/master/img/loading.gif" class="page-loading">');
         $('.giveaway__row-outer-wrap:last').parent().after($loader);
 
         function getNextUrl(page) {
@@ -832,10 +832,37 @@
             return url.toString();
         }
 
+        // Delegated click handler: works for all dynamically loaded pages
+        $(document).off('click.esgHide').on('click.esgHide', '.giveaway__hide', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            const $btn =$(this);
+            const gameId = $btn.attr('data-game-id') || $btn.closest('.giveaway__row-outer-wrap').attr('data-game-id');
+            const gameName = $btn.closest('.giveaway__row-outer-wrap').find('.giveaway__heading__name').text().trim();
+            const $popup =$('.popup--hide-games');
+
+            if (!gameId || !$popup.length) return;
+
+            // Populate native modal fields
+            $popup.find('input[name="game_id"]').val(gameId);
+            $popup.find('.popup__heading__bold').text(gameName);
+
+            // Trigger popup open via site's bPopup plugin
+            if (typeof $.fn.bPopup === 'function') {
+                $popup.bPopup({
+                    opacity: 0.85,
+                    fadeSpeed: 200,
+                    followSpeed: 500,
+                    modalColor: '#3c424d'
+                });
+            }
+        });
+
         $(window).on('scroll', function () {
             if (loading || isLastPage) return;
 
-            if ($(window).scrollTop() + $(window).height() > $(document).height() - 800) {
+            if ($(window).scrollTop() + $(window).height() >$(document).height() - 800) {
                 loading = true;
                 $loader.show();
                 const targetPage = currentPage + 1;
@@ -847,40 +874,25 @@
                         const $parsed = $($.parseHTML(html));
                         isLastPage = $parsed.find('.pagination__navigation:contains("Next")').length === 0;
 
-                        const $newRows = $parsed.find('.giveaway__row-outer-wrap');
+                        const $newRows =$parsed.find('.giveaway__row-outer-wrap');
                         if ($newRows.length) {
-                            const $container = $('.giveaway__row-outer-wrap:last').parent();
-                            $container.append(
+                            const $container = $('.giveaway__row-outer-wrap:last').parent();$container.append(
                                 `<div class="page__heading"><div class="page__heading__breadcrumbs"><a>Giveaways</a> <i class="fa fa-angle-right"></i> Page ${targetPage}</div></div>`
                             );
+
                             $newRows.each(function () {
-                                const $el = $(this);
+                                const $el =$(this);
+
+                                // Ensure row has the game-id attribute so the hide confirmation can target it
+                                const gameId = $el.find('.giveaway__hide').attr('data-game-id');
+                                if (gameId) {
+                                    $el.attr('data-game-id', gameId);
+                                }
+
                                 decorateGiveaway($el);
-
-                                // Re-bind native SteamGifts hide & popup handlers for dynamically injected rows
-    $el.find('.giveaway__hide').on('click', function () {
-        const gameId = $(this).attr('data-game-id');
-        const gameName = $(this).closest('.giveaway__heading, h2').find('.giveaway__heading__name').text();
-        const $popup = $('.popup--hide-games');
-
-        $popup.find('input[name="game_id"]').val(gameId);
-        $popup.find('.popup__heading__bold').text(gameName);
-    });
-
-    $el.find('.trigger-popup').on('click', function () {
-        const popupClass = $(this).attr('data-popup');
-        if (popupClass && typeof $.fn.bPopup === 'function') {
-            $('.' + popupClass).bPopup({
-                opacity: 0.85,
-                fadeSpeed: 200,
-                followSpeed: 500,
-                modalColor: '#3c424d'
-            });
-        }
-    });
-
                                 $container.append($el);
                             });
+
                             applyFilters();
                         }
                         currentPage = targetPage;
